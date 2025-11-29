@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
-const BASE_URL = process.env.REACT_APP_WEATHER_API_BASE_URL;
+const BASE_URL = process.env.REACT_APP_WEATHER_API_URL;
 
 class WeatherService {
     /**
@@ -11,14 +11,14 @@ class WeatherService {
      */
     async getWeatherData(location) {
         try {
-            const response = await axios.get(`${BASE_URL}/forecast.json`, {
+            const response = await axios.get(`${BASE_URL}/forecast.json?key=${API_KEY}`, {
                 params: {
-                    key: API_KEY,
                     q: location,
-                    days: 2, // Today + tomorrow
-                    aqi: 'no'
+                    days: 2,
+                    aqi: 'yes'
                 }
             });
+            console.log(response.request.responseURL);
             return response.data;
         } catch (error) {
             console.error('Error fetching weather data:', error);
@@ -35,7 +35,7 @@ class WeatherService {
      */
     async searchLocations(query) {
         try {
-            const response = await axios.get(`${BASE_URL}/search.json`, {
+            const response = await axios.get(`${BASE_URL}/search.json?`, {
                 params: {
                     key: API_KEY,
                     q: query

@@ -29,7 +29,7 @@ function ForecastCard({ data, isCelsius }) {
             </div>
 
             <div className="forecast-details">
-                <span>Rain: {data.day.daily_chance_of_rain}%</span>
+                <span>Rain: {data.day.daily_chance_of_rain}% </span>
                 <span>UV: {data.day.uv}</span>
             </div>
         </div>
