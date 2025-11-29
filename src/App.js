@@ -1,11 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 import weatherService from './services/weatherService.js';
-import SearchBar from './components/SearchBar/SearchBar.jsx';
-import WeatherCard from './components/WeatherCard/WeatherCard.jsx';
-import ForecastCard from './components/ForecastCard/ForecastCard.jsx';
-import TemperatureToggle from './components/TemperatureToggle/TemperatureToggle.jsx';
-import FavoriteLocations from './components/FavoriteLocations/FavoriteLocations.jsx';
+import SearchBar from './Components/SearchBar/SearchBar.jsx';
+import WeatherCard from './Components/WeatherCard/WeatherCard.jsx';
+import ForecastCard from './Components/ForecastCard/ForecastCard.jsx';
+import TemperatureToggle from './Components/TemperatureToggle/TemperatureToggle.jsx';
+import FavoriteLocations from './Components/FavoriteLocations/FavoriteLocations.jsx';
 import { useState, useEffect } from 'react';
 
 function App() {
