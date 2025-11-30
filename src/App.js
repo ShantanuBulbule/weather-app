@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import weatherService from './services/weatherService';
-import SearchBar from './Components/SearchBar/SearchBar';
-import WeatherCard from './Components/WeatherCard/WeatherCard';
-import ForecastCard from './Components/ForecastCard/ForecastCard';
-import TemperatureToggle from './Components/TemperatureToggle/TemperatureToggle';
-import FavoriteLocations from './Components/FavoriteLocations/FavoriteLocations';
+import SearchBar from './components/SearchBar/SearchBar';
+import WeatherCard from './components/WeatherCard/WeatherCard';
+import ForecastCard from './components/ForecastCard/ForecastCard';
+import TemperatureToggle from './components/TemperatureToggle/TemperatureToggle';
+import FavoriteLocations from './components/FavoriteLocations/FavoriteLocations';
 import './App.css';
 
 function App() {
