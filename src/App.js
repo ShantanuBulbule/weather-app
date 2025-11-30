@@ -1,30 +1,30 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import weatherService from './services/weatherService';
+import SearchBar from './components/SearchBar/SearchBar';
+import WeatherCard from './components/WeatherCard/WeatherCard';
+import ForecastCard from './components/ForecastCard/ForecastCard';
+import TemperatureToggle from './components/TemperatureToggle/TemperatureToggle';
+import FavoriteLocations from './components/FavoriteLocations/FavoriteLocations';
 import './App.css';
-import weatherService from './services/weatherService.js';
-import SearchBar from './components/SearchBar/SearchBar.jsx';
-import WeatherCard from './components/WeatherCard/WeatherCard.jsx';
-import ForecastCard from './components/ForecastCard/ForecastCard.jsx';
-import TemperatureToggle from './components/TemperatureToggle/TemperatureToggle.jsx';
-import FavoriteLocations from './components/FavoriteLocations/FavoriteLocations.jsx';
-import { useState, useEffect } from 'react';
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(true);
   const [weatherData, setWeatherData] = useState(null);
-  const [isCelsius, setIsCelsius] = useState(true);
-  const [favoriteLocations, setFavoriteLocations] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isCelsius, setIsCelsius] = useState(true);
+  const [favorites, setFavorites] = useState([]);
 
-  const handleSearch = async (query) => {
-    setSearchQuery(query);
-    try {
-      const data = await weatherService.getWeatherData(query);
-      setWeatherData(data);
-    } catch (error) {
-      console.error('Error fetching weather data:', error);
+  // Load favorites from localStorage on mount
+  useEffect(() => {
+    const savedFavorites = localStorage.getItem('weatherFavorites');
+    if (savedFavorites) {
+      setFavorites(JSON.parse(savedFavorites));
     }
-  };
+
+    // Get user's location on initial load
+    loadUserLocation();
+  }, []);
+
   const loadUserLocation = async () => {
     try {
       setLoading(true);
@@ -32,22 +32,29 @@ function App() {
       const coords = await weatherService.getCurrentLocation();
       const data = await weatherService.getWeatherData(`${coords.lat},${coords.lon}`);
       setWeatherData(data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching weather data:', error);
-      setError(error.message);
+    } catch (err) {
+      // Fallback to default location if geolocation fails
+      console.warn('Geolocation failed, using default location');
+      handleLocationSearch('New York');
+    } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const savedFavorites = localStorage.getItem('weatherFavorites');
-    if (savedFavorites) {
-      setFavoriteLocations(JSON.parse(savedFavorites));
+  const handleLocationSearch = async (location) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await weatherService.getWeatherData(location);
+      setWeatherData(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-    loadUserLocation();
-  }, []);
-  const handleTemperatureToggle = () => {
+  };
+
+  const handleToggleUnit = () => {
     setIsCelsius(!isCelsius);
   };
 
@@ -56,75 +63,66 @@ function App() {
       id: Date.now(),
       name: location.name,
       region: location.region,
-      country: location.country,
-      lat: location.lat,
-      lon: location.lon,
+      country: location.country
     };
-    const updatedFavorites = [...favoriteLocations, newFavorite];
-    setFavoriteLocations(updatedFavorites);
+
+    const updatedFavorites = [...favorites, newFavorite];
+    setFavorites(updatedFavorites);
     localStorage.setItem('weatherFavorites', JSON.stringify(updatedFavorites));
   };
 
-  const handleRemoveFavorite = (location) => {
-    const updatedFavorites = favoriteLocations.filter((loc) => loc.id !== location.id);
-    setFavoriteLocations(updatedFavorites);
+  const handleRemoveFavorite = (id) => {
+    const updatedFavorites = favorites.filter(fav => fav.id !== id);
+    setFavorites(updatedFavorites);
     localStorage.setItem('weatherFavorites', JSON.stringify(updatedFavorites));
   };
 
   const handleSelectFavorite = (favorite) => {
-    handleSearch(`${favorite.name},${favorite.region},${favorite.country}`);
+    handleLocationSearch(`${favorite.name}, ${favorite.country}`);
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="app">
+      <header className="app-header">
         <h1>Weather App</h1>
         <TemperatureToggle
           isCelsius={isCelsius}
-          onToggle={handleTemperatureToggle}
+          onToggle={handleToggleUnit}
         />
       </header>
+
       <main className="app-main">
-        <SearchBar onSearch={handleSearch} />
-        {loading ? (
-          <p>Loading weather data...</p>
-        ) : error ? (
-          <p>Error: {error}</p>
-        ) : weatherData ? (
+        <SearchBar onSearch={handleLocationSearch} />
+
+        {loading && <div className="loading">Loading weather data...</div>}
+
+        {error && <div className="error">{error}</div>}
+
+        {weatherData && !loading && (
           <>
-            <WeatherCard
-              location={weatherData.location}
-              current={weatherData.current}
-              isCelsius={isCelsius}
-              onAddFavorite={handleAddFavorite}
-              onRemoveFavorite={handleRemoveFavorite}
-            />
-            <ForecastCard
-              forecast={weatherData.forecast.forecastday}
-              isCelsius={isCelsius}
-            />
+            <div className="weather-container">
+              <WeatherCard
+                data={weatherData.current}
+                location={weatherData.location}
+                isCelsius={isCelsius}
+                onAddFavorite={() => handleAddFavorite(weatherData.location)}
+              />
+
+              <ForecastCard
+                data={weatherData.forecast.forecastday[1]}
+                isCelsius={isCelsius}
+              />
+            </div>
+
             <FavoriteLocations
-              favoriteLocations={favoriteLocations}
-              onSelectFavorite={handleSelectFavorite}
-              onRemoveFavorite={handleRemoveFavorite}
+              favorites={favorites}
+              onSelect={handleSelectFavorite}
+              onRemove={handleRemoveFavorite}
             />
           </>
-        ) : null}
+        )}
       </main>
-      <img src={logo} className="App-logo" alt="logo" />
-      <p>
-        Edit <code>src/App.js</code> and save to reload.
-      </p>
-      <a
-        className="App-link"
-        href="https://reactjs.org"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Learn React
-      </a>
-
-    </div >
+    </div>
   );
 }
 
