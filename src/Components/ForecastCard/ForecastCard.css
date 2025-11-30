@@ -1,0 +1,37 @@
+.forecast-card {
+    background-color: rgb(127, 240, 255);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rebeccapurple;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.forecast-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.forecast-icon {
+    width: 100px;
+    height: 100px;
+}
+
+.forecast-condition {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.forecast-temp {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+}
+
+.forecast-details {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #666;
+}

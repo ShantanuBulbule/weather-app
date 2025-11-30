@@ -23,6 +23,7 @@ function App() {
 
     // Get user's location on initial load
     loadUserLocation();
+    // eslint-disable-next-line
   }, []);
 
   const loadUserLocation = async () => {
@@ -59,16 +60,21 @@ function App() {
   };
 
   const handleAddFavorite = (location) => {
-    const newFavorite = {
-      id: Date.now(),
-      name: location.name,
-      region: location.region,
-      country: location.country
-    };
+    if (favorites.some(fav => fav.name === location.name && fav.region === location.region && fav.country === location.country)) {
+      alert('Location already added to favorites');
+      return;
+    } else {
+      const newFavorite = {
+        id: Date.now(),
+        name: location.name,
+        region: location.region,
+        country: location.country
+      };
 
-    const updatedFavorites = [...favorites, newFavorite];
-    setFavorites(updatedFavorites);
-    localStorage.setItem('weatherFavorites', JSON.stringify(updatedFavorites));
+      const updatedFavorites = [...favorites, newFavorite];
+      setFavorites(updatedFavorites);
+      localStorage.setItem('weatherFavorites', JSON.stringify(updatedFavorites));
+    }
   };
 
   const handleRemoveFavorite = (id) => {
