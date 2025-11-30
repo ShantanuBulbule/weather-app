@@ -15,7 +15,7 @@ class WeatherService {
                 params: {
                     q: location,
                     days: 2,
-                    aqi: 'yes'
+                    aqi: 'no'
                 }
             });
             console.log(response.request.responseURL);

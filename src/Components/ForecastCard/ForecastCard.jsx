@@ -13,7 +13,9 @@ function ForecastCard({ data, isCelsius }) {
                     alt={data.day.condition.text}
                     className="forecast-icon"
                 />
-
+                <div className="forecast-condition">
+                    {data.day.condition.text}
+                </div>
                 <div className="forecast-temp">
                     <div className="temp-high">
                         High: {formatTemperature(data.day.maxtemp_c, isCelsius)}
@@ -22,10 +24,6 @@ function ForecastCard({ data, isCelsius }) {
                         Low: {formatTemperature(data.day.mintemp_c, isCelsius)}
                     </div>
                 </div>
-            </div>
-
-            <div className="forecast-condition">
-                {data.day.condition.text}
             </div>
 
             <div className="forecast-details">
