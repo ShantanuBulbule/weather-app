@@ -1,3 +1,21 @@
+MegaZone Cloud Weather App Technical Assignment:
+To try this app out on the cloud rather than locally, you can just click/copy paste this link: https://weather-app-gules-sigma-11.vercel.app/
+The app was deployed using Vercel for ease of use and because I just wanted to try out Vercel. This app was also built using the react
+template, which means that the description below will help outline the commands that can be used when running this app locally.
+
+Steps to run this app locally:
+1. Clone this repository
+  - git clone https://github.com/ShantanuBulbule/weather-app.git
+2. cd into the repository
+  - cd weather-app
+3. Run 'npm install' in the terminal
+4. Run 'npm start' in the terminal
+5. Wait for the app to automatically launch in your default browser.
+6. Whether trying this out using the Vercel deployed app or running this locally, let the app have location access when prompted.
+
+Note: If you have gotten this far, I'd just like to say this was my first website/app I made by myself, and I hope you find it somewhat functional.
+Thanks for trying it out! I hope to make it better and add more features in the future.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
